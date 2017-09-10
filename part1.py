@@ -1,7 +1,7 @@
 import json
 
 # Calculate uniGram function
-def uniGram( fileName ):
+def uniGram( fileName, outputName):
     # Open file
     with open(fileName) as f:
         Sentences = []
@@ -26,8 +26,59 @@ def uniGram( fileName ):
 
     print uniGram_count_dic
     print len(uniGram_count_dic)
-    with open('file.txt', 'w') as file:
+    with open(outputName, 'w') as file:
         file.write(json.dumps(uniGram_count_dic))
 
+def biGram(fileName, outputName):
+    #read file
+    with open(fileName) as f:
+        Sentences = []
+        for line in f:
+            Sentences.append(line)
 
-uniGram( './SentimentDataset/Dev/neg.txt' )
+    bigram_count_dic = {}
+    w_first_count = {}
+    bigram_dic = {}
+    
+    for line in Sentences:
+        words = line.split()
+        n = len(words)
+        for i in range(n-1):
+            if i == 0 :
+                w_first = '*'
+            else:
+                w_first = words[i-1].lower()
+
+            w_second = words[i].lower()
+
+            #creat w_first's key and value
+            if w_first not in bigram_count_dic:
+                #count w_second
+                w_second_count = {}
+                w_second_count[w_second] = 1
+                #add w_fisrt to dic, assaign value to w_second_count dic
+                bigram_count_dic[w_first] = w_second_count
+                w_first_count[w_first] = 1
+
+            else:
+                w_first_count[w_first] += 1
+                if w_second not in bigram_count_dic[w_first]:
+                    bigram_count_dic[w_first][w_second] = 1
+                else:
+                    bigram_count_dic[w_first][w_second] += 1
+
+    #get possibility dictionary
+    for k in bigram_count_dic:
+        n = w_first_count[k]
+        w_second = {}
+        for w in bigram_count_dic[k]:
+            w_second[w]= float(bigram_count_dic[k][w])/n
+        bigram_dic[k] = w_second   
+    
+    print bigram_dic
+    with open(outputName, 'w') as file:
+        file.write(json.dumps(bigram_dic))
+
+uniGram( './SentimentDataset/Dev/neg.txt','unigram_output_neg.txt' )
+biGram('./SentimentDataset/Dev/neg.txt','bigram_output_neg.txt' )
+
