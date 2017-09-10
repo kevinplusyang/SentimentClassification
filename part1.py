@@ -1,3 +1,5 @@
+import json
+
 # Calculate uniGram function
 def uniGram( fileName ):
     # Open file
@@ -18,11 +20,14 @@ def uniGram( fileName ):
             else:
                 uniGram_count_dic[word] += 1
 
+    # Get the possibility of each word
     for word in uniGram_count_dic:
         uniGram_count_dic[word] = float(uniGram_count_dic[word]) / wordCount
 
     print uniGram_count_dic
     print len(uniGram_count_dic)
+    with open('file.txt', 'w') as file:
+        file.write(json.dumps(uniGram_count_dic))
 
 
 uniGram( './SentimentDataset/Dev/neg.txt' )
