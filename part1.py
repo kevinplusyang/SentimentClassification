@@ -46,7 +46,7 @@ def biGram(fileName, outputName):
     for line in Sentences:
         words = line.split()
         n = len(words)
-        for i in range(n-1):
+        for i in range(n):
             if i == 0 :
                 w_first = '*'
             else:
@@ -107,10 +107,11 @@ def uniGenerator():
         if targetWord == "." or targetWord == "?" or targetWord == "!":
             break
 
+    print "Unigram Generator: "
     print sentence.capitalize()
 
 def biGenerator():
-    bigram_count_dic, w_first_count = biGram('./SentimentDataset/Dev/neg.txt','bigram_output_neg.txt' )
+    bigram_count_dic, w_first_count = biGram('./SentimentDataset/Train/neg.txt','bigram_output_neg.txt' )
     w_first_dic = bigram_count_dic['*']
 
     carry = 0
@@ -134,6 +135,7 @@ def biGenerator():
         if targetWord == "." or targetWord == "?" or targetWord == "!":
             break
 
+    print "Bigram Generator: "
     print sentence.capitalize()
 
 
@@ -146,8 +148,8 @@ def biGenerator():
     
 
 
-uniGram( './SentimentDataset/Dev/neg.txt','unigram_output_neg.txt' )
-biGram('./SentimentDataset/Dev/neg.txt','bigram_output_neg.txt' )
+uniGram( './SentimentDataset/Train/neg.txt','unigram_output_neg.txt' )
+biGram('./SentimentDataset/Train/neg.txt','bigram_output_neg.txt' )
 uniGenerator()
 biGenerator()
 
