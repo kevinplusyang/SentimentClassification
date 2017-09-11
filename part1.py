@@ -1,4 +1,5 @@
 import json
+import random
 
 # Calculate uniGram function
 def uniGram( fileName, outputName):
@@ -24,10 +25,12 @@ def uniGram( fileName, outputName):
     for word in uniGram_count_dic:
         uniGram_count_dic[word] = float(uniGram_count_dic[word]) / wordCount
 
-    print uniGram_count_dic
-    print len(uniGram_count_dic)
     with open(outputName, 'w') as file:
         file.write(json.dumps(uniGram_count_dic))
+
+    for word in uniGram_count_dic:
+        uniGram_count_dic[word] = float(uniGram_count_dic[word]) * wordCount
+    return uniGram_count_dic
 
 def biGram(fileName, outputName):
     #read file
@@ -74,11 +77,42 @@ def biGram(fileName, outputName):
         for w in bigram_count_dic[k]:
             w_second[w]= float(bigram_count_dic[k][w])/n
         bigram_dic[k] = w_second   
-    
-    print bigram_dic
+
     with open(outputName, 'w') as file:
         file.write(json.dumps(bigram_dic))
 
+
+def popWord(uniGram_count_dic, carry):
+    rand = random.randint(0, carry)
+    for word in uniGram_count_dic:
+        if uniGram_count_dic[word] > rand:
+            targetWord = word
+            break
+    return targetWord
+
+
+def uniGenerator():
+    uniGram_count_dic = uniGram('./SentimentDataset/Train/neg.txt', 'unigram_output_neg.txt')
+
+    print uniGram_count_dic
+    carry = 0
+    for word in uniGram_count_dic:
+        uniGram_count_dic[word] += carry
+        carry = uniGram_count_dic[word]
+
+    sentence = ""
+    while True:
+        targetWord = popWord(uniGram_count_dic, carry)
+        sentence += targetWord + " "
+        if targetWord == "." or targetWord == "?" or targetWord == "!" :
+            break
+
+    print sentence.title()
+
+
+
+
 uniGram( './SentimentDataset/Dev/neg.txt','unigram_output_neg.txt' )
 biGram('./SentimentDataset/Dev/neg.txt','bigram_output_neg.txt' )
+uniGenerator()
 
