@@ -86,7 +86,7 @@ def biGram(fileName, outputName):
 def popWord(uniGram_count_dic, carry):
     rand = random.randint(0, carry)
     for word in uniGram_count_dic:
-        if uniGram_count_dic[word] > rand:
+        if uniGram_count_dic[word] >= rand:
             targetWord = word
             break
     return targetWord
@@ -95,7 +95,6 @@ def popWord(uniGram_count_dic, carry):
 def uniGenerator():
     uniGram_count_dic = uniGram('./SentimentDataset/Train/neg.txt', 'unigram_output_neg.txt')
 
-    print uniGram_count_dic
     carry = 0
     for word in uniGram_count_dic:
         uniGram_count_dic[word] += carry
@@ -113,14 +112,32 @@ def uniGenerator():
 def biGenerator():
     bigram_count_dic, w_first_count = biGram('./SentimentDataset/Dev/neg.txt','bigram_output_neg.txt' )
     w_first_dic = bigram_count_dic['*']
-    print w_first_dic
+
     carry = 0
     for word in w_first_dic:    
         w_first_dic[word] += carry
         carry = w_first_dic[word]
     targetWord = popWord(w_first_dic, carry)
-    print targetWord
-    print w_first_dic
+    sentence = "" + targetWord + " "
+
+
+    while True:
+        if targetWord not in bigram_count_dic:
+            break
+        second_word_dic = bigram_count_dic[targetWord].copy()
+        carry = 0
+        for word in second_word_dic:
+            second_word_dic[word] += carry
+            carry = second_word_dic[word]
+        targetWord = popWord(second_word_dic, carry)
+        sentence += targetWord + " "
+        if targetWord == "." or targetWord == "?" or targetWord == "!":
+            break
+
+    print sentence.capitalize()
+
+
+
     
         
     
@@ -132,4 +149,5 @@ def biGenerator():
 uniGram( './SentimentDataset/Dev/neg.txt','unigram_output_neg.txt' )
 biGram('./SentimentDataset/Dev/neg.txt','bigram_output_neg.txt' )
 uniGenerator()
+biGenerator()
 
