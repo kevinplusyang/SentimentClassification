@@ -104,10 +104,10 @@ def uniGenerator():
     while True:
         targetWord = popWord(uniGram_count_dic, carry)
         sentence += targetWord + " "
-        if targetWord == "." or targetWord == "?" or targetWord == "!" :
+        if targetWord == "." or targetWord == "?" or targetWord == "!":
             break
 
-    print sentence.title()
+    print sentence.capitalize()
 
 
 
