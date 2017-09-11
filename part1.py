@@ -81,6 +81,7 @@ def biGram(fileName, outputName):
     with open(outputName, 'w') as file:
         file.write(json.dumps(bigram_dic))
 
+    return bigram_count_dic, w_first_count
 
 def popWord(uniGram_count_dic, carry):
     rand = random.randint(0, carry)
@@ -109,7 +110,23 @@ def uniGenerator():
 
     print sentence.capitalize()
 
-
+def biGenerator():
+    bigram_count_dic, w_first_count = biGram('./SentimentDataset/Dev/neg.txt','bigram_output_neg.txt' )
+    w_first_dic = bigram_count_dic['*']
+    print w_first_dic
+    carry = 0
+    for word in w_first_dic:    
+        w_first_dic[word] += carry
+        carry = w_first_dic[word]
+    targetWord = popWord(w_first_dic, carry)
+    print targetWord
+    print w_first_dic
+    
+        
+    
+    
+    
+    
 
 
 uniGram( './SentimentDataset/Dev/neg.txt','unigram_output_neg.txt' )
