@@ -92,8 +92,8 @@ def popWord(uniGram_count_dic, carry):
     return targetWord
 
 
-def uniGenerator():
-    uniGram_count_dic = uniGram('./SentimentDataset/Train/neg.txt', 'unigram_output_neg.txt')
+def uniGenerator(fileName, outputName):
+    uniGram_count_dic = uniGram(fileName, outputName)
 
     carry = 0
     for word in uniGram_count_dic:
@@ -110,17 +110,21 @@ def uniGenerator():
     print "Unigram Generator: "
     print sentence.capitalize()
 
-def biGenerator():
-    bigram_count_dic, w_first_count = biGram('./SentimentDataset/Train/neg.txt','bigram_output_neg.txt' )
+def biGenerator(fileName, outputName, targetWord_input = None):
+    bigram_count_dic, w_first_count = biGram(fileName, outputName)
     w_first_dic = bigram_count_dic['*']
-
-    carry = 0
-    for word in w_first_dic:    
-        w_first_dic[word] += carry
-        carry = w_first_dic[word]
-    targetWord = popWord(w_first_dic, carry)
-    sentence = "" + targetWord + " "
-
+    if targetWord_input == None:
+        carry = 0
+        for word in w_first_dic:    
+            w_first_dic[word] += carry
+            carry = w_first_dic[word]
+        targetWord = popWord(w_first_dic, carry)
+        sentence = "" + targetWord + " "
+        
+    else:
+        Words = targetWord_input.split()
+        targetWord = Words[-1].lower()
+        sentence = "" + targetWord_input + " "
 
     while True:
         if targetWord not in bigram_count_dic:
@@ -139,17 +143,10 @@ def biGenerator():
     print sentence.capitalize()
 
 
-
-    
-        
-    
-    
-    
-    
-
-
 uniGram( './SentimentDataset/Train/neg.txt','unigram_output_neg.txt' )
 biGram('./SentimentDataset/Train/neg.txt','bigram_output_neg.txt' )
-uniGenerator()
-biGenerator()
+
+print '################'
+uniGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt' )
+biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt','I have')
 
