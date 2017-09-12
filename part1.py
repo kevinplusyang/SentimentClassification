@@ -113,6 +113,7 @@ def uniGenerator(fileName, outputName):
 def biGenerator(fileName, outputName, targetWord_input = None):
     bigram_count_dic, w_first_count = biGram(fileName, outputName)
     w_first_dic = bigram_count_dic['*']
+    #generator without giving seed
     if targetWord_input == None:
         carry = 0
         for word in w_first_dic:    
@@ -120,9 +121,10 @@ def biGenerator(fileName, outputName, targetWord_input = None):
             carry = w_first_dic[word]
         targetWord = popWord(w_first_dic, carry)
         sentence = "" + targetWord + " "
-        
+    #generator with giving seed   
     else:
         Words = targetWord_input.split()
+        #only use the latest word in seed to do bigram generating
         targetWord = Words[-1].lower()
         sentence = "" + targetWord_input + " "
 
@@ -142,9 +144,17 @@ def biGenerator(fileName, outputName, targetWord_input = None):
     print "Bigram Generator: "
     print sentence.capitalize()
 
-
+#negative unigram generator
 uniGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt' )
+#negative bigram generator without seed
 biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt')
+#negative bigram generator with seed 'I have'
+biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt'，'I have')
+#positive unigram generator
 uniGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt' )
+#positive unigram generator without seed
 biGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt')
+#positive bigram generator with seed 'I have'
+biGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt', 'I have')
+
 
