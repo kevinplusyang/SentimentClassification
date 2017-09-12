@@ -143,10 +143,8 @@ def biGenerator(fileName, outputName, targetWord_input = None):
     print sentence.capitalize()
 
 
-uniGram( './SentimentDataset/Train/neg.txt','unigram_output_neg.txt' )
-biGram('./SentimentDataset/Train/neg.txt','bigram_output_neg.txt' )
-
-print '################'
 uniGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt' )
-biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt','I have')
+biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt')
+uniGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt' )
+biGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt')
 
