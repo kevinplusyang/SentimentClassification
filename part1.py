@@ -94,23 +94,23 @@ def popWord(uniGram_count_dic, carry):
     return targetWord
 
 
-def uniGenerator(fileName, outputName):
-    uniGram_count_dic = uniGram(fileName, outputName)
-
-    carry = 0
-    for word in uniGram_count_dic:
-        uniGram_count_dic[word] += carry
-        carry = uniGram_count_dic[word]
-
-    sentence = ""
-    while True:
-        targetWord = popWord(uniGram_count_dic, carry)
-        sentence += targetWord + " "
-        if targetWord == "." or targetWord == "?" or targetWord == "!":
-            break
-
-    print "Unigram Generator: "
-    print sentence.capitalize()
+# def uniGenerator(fileName, outputName):
+#     uniGram_count_dic = uniGram(fileName, outputName)
+#
+#     carry = 0
+#     for word in uniGram_count_dic:
+#         uniGram_count_dic[word] += carry
+#         carry = uniGram_count_dic[word]
+#
+#     sentence = ""
+#     while True:
+#         targetWord = popWord(uniGram_count_dic, carry)
+#         sentence += targetWord + " "
+#         if targetWord == "." or targetWord == "?" or targetWord == "!":
+#             break
+#
+#     print "Unigram Generator: "
+#     print sentence.capitalize()
 
 def biGenerator(fileName, outputName, targetWord_input = None):
     bigram_count_dic, w_first_count = biGram(fileName, outputName)
@@ -146,17 +146,17 @@ def biGenerator(fileName, outputName, targetWord_input = None):
     print "Bigram Generator: "
     print sentence.capitalize()
 
-#negative unigram generator
-uniGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt' )
-#negative bigram generator without seed
-biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt')
-#negative bigram generator with seed 'I have'
-biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt','I have')
-#positive unigram generator
-uniGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt' )
-#positive unigram generator without seed
-biGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt')
-#positive bigram generator with seed 'I have'
-biGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt', 'I have')
+# #negative unigram generator
+# uniGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt' )
+# #negative bigram generator without seed
+# biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt')
+# #negative bigram generator with seed 'I have'
+# biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt','I have')
+# #positive unigram generator
+# uniGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt' )
+# #positive unigram generator without seed
+# biGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt')
+# #positive bigram generator with seed 'I have'
+# biGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt', 'I have')
 
 
