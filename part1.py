@@ -1,8 +1,10 @@
+
+
 import json
 import random
 
 # Calculate uniGram function
-def uniGram( fileName, outputName):
+def uniGram(fileName):
     # Open file
     with open(fileName) as f:
         Sentences = []
@@ -22,15 +24,15 @@ def uniGram( fileName, outputName):
                 uniGram_count_dic[word] += 1
 
     # Get the possibility of each word
-    for word in uniGram_count_dic:
-        uniGram_count_dic[word] = float(uniGram_count_dic[word]) / wordCount
+    #for word in uniGram_count_dic:
+        #uniGram_count_dic[word] = float(uniGram_count_dic[word]) / wordCount
 
-    with open(outputName, 'w') as file:
-        file.write(json.dumps(uniGram_count_dic))
+    #with open(outputName, 'w') as file:
+        #file.write(json.dumps(uniGram_count_dic))
 
-    for word in uniGram_count_dic:
-        uniGram_count_dic[word] = float(uniGram_count_dic[word]) * wordCount
-    return uniGram_count_dic
+    #for word in uniGram_count_dic:
+        #uniGram_count_dic[word] = float(uniGram_count_dic[word]) * wordCount
+    return uniGram_count_dic, wordCount
 
 def biGram(fileName, outputName):
     #read file
@@ -149,7 +151,7 @@ uniGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt' )
 #negative bigram generator without seed
 biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt')
 #negative bigram generator with seed 'I have'
-biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt'，'I have')
+biGenerator('./SentimentDataset/Train/neg.txt','unigram_output_neg.txt','I have')
 #positive unigram generator
 uniGenerator('./SentimentDataset/Train/pos.txt','unigram_output_pos.txt' )
 #positive unigram generator without seed
