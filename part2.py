@@ -79,7 +79,7 @@ def handle_bi_unknown(fileName):
 
 
 
-def emotion(sentence, pos_bigram_count_dic, pos_w_first_count, neg_bigram_count_dic, neg_w_first_count, pos_uni_dic, neg_uni_dic, pos_train, neg_train,lamada):
+def emotion(sentence, pos_bigram_count_dic, pos_w_first_count, neg_bigram_count_dic, neg_w_first_count, pos_uni_dic, neg_uni_dic, pos_train, neg_train,lamada1, lamada2):
     words = sentence.split()
     n = len(words)
 
@@ -101,9 +101,9 @@ def emotion(sentence, pos_bigram_count_dic, pos_w_first_count, neg_bigram_count_
             w_second = words[i].lower()
 
         if w_second in pos_bigram_count_dic[w_first]:
-            temp_possibility = float(pos_bigram_count_dic[w_first][w_second] + lamada) / (pos_w_first_count[w_first] + len(pos_uni_dic) * lamada)
+            temp_possibility = float(pos_bigram_count_dic[w_first][w_second] + lamada1) / (pos_w_first_count[w_first] + len(pos_uni_dic) * lamada1)
         else:
-            temp_possibility = float(lamada) / (pos_w_first_count[w_first] + len(pos_uni_dic) * lamada)
+            temp_possibility = float(lamada1) / (pos_w_first_count[w_first] + len(pos_uni_dic) * lamada1)
 
         pos_possibility += np.log(temp_possibility)
 
@@ -122,10 +122,10 @@ def emotion(sentence, pos_bigram_count_dic, pos_w_first_count, neg_bigram_count_
             w_second = words[i].lower()
 
         if w_second in neg_bigram_count_dic[w_first]:
-            temp_possibility = float(neg_bigram_count_dic[w_first][w_second] + lamada) / (
-            neg_w_first_count[w_first] + len(neg_uni_dic) * lamada)
+            temp_possibility = float(neg_bigram_count_dic[w_first][w_second] + lamada2) / (
+            neg_w_first_count[w_first] + len(neg_uni_dic) * lamada2)
         else:
-            temp_possibility = float(lamada) / (neg_w_first_count[w_first] + len(neg_uni_dic) * lamada)
+            temp_possibility = float(lamada2) / (neg_w_first_count[w_first] + len(neg_uni_dic) * lamada2)
 
         neg_possibility += np.log(temp_possibility)
 
@@ -185,51 +185,39 @@ def findLamada():
     neg_uni_dic = handle_uni_unknown("./SentimentDataset/Train/neg_train.txt")
 
     maxProbility = 0
-    maxLamada = 0
+    maxLamada1 = 0
     maxLamada2 = 0
-    i = 0.001
+    i = 0.01
+    j = 0.01
     while (i < 1):
-        pos_count = 0
-        pos_total = 0
-        with open("./SentimentDataset/Train/pos_test.txt") as f:
-            for line in f:
-                pos_total += 1
-                if emotion(line, pos_bigram_count_dic, pos_w_first_count, neg_bigram_count_dic,
-                              neg_w_first_count, pos_uni_dic,
-                              neg_uni_dic, pos_train, neg_train,i) == 0:
-                    pos_count += 1
+        while (j < 1):
+            pos_count = 0
+            pos_total = 0
+            with open("./SentimentDataset/Train/neg_test.txt") as f:
+                for line in f:
+                    pos_total += 1
+                    if emotion(line, pos_bigram_count_dic, pos_w_first_count, neg_bigram_count_dic,
+                                  neg_w_first_count, pos_uni_dic,
+                                  neg_uni_dic, pos_train, neg_train,i, j) == 1:
+                        pos_count += 1
 
-        print "*******"
+            print "*******"
+            print i
+            print j
+            print float(pos_count) / pos_total
+            if float(pos_count) / pos_total > maxProbility:
+                maxProbility = float(pos_count) / pos_total
+                maxLamada1 = i
+                maxLamada2 = j
+            j += 0.01
+        j = 0.01
+        i += 0.01
         print i
-        print pos_total
-        print pos_count
-        print float(pos_count) / pos_total
-        if float(pos_count) / pos_total > maxProbility:
-            maxProbility = float(pos_count) / pos_total
-            maxLamada = i
-        print i
-        i+= 0.001
 
     print "--------------"
-    print maxLamada
+    print maxLamada1
+    print maxLamada2
     print maxProbility
-    # for lamada in lamada_list:
-    #     pos_count = 0
-    #     pos_total = 0
-    #     with open("./SentimentDataset/Train/neg_test.txt") as f:
-    #         for line in f:
-    #             pos_total += 1
-    #             if emotion(line, pos_bigram_count_dic, pos_w_first_count, neg_bigram_count_dic,
-    #                           neg_w_first_count, pos_uni_dic,
-    #                           neg_uni_dic, pos_train, neg_train,lamada) == 1:
-    #                 pos_count += 1
-    #
-    #     print "*******"
-    #     print lamada
-    #     print pos_total
-    #     print pos_count
-    #     print float(pos_count) / pos_total
-
 
 findLamada()
 
