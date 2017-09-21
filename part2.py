@@ -193,20 +193,30 @@ def findLamada():
         while (j < 1):
             pos_count = 0
             pos_total = 0
-            with open("./SentimentDataset/Train/neg_test.txt") as f:
+            with open("./SentimentDataset/Train/pos_test.txt") as f:
                 for line in f:
                     pos_total += 1
                     if emotion(line, pos_bigram_count_dic, pos_w_first_count, neg_bigram_count_dic,
                                   neg_w_first_count, pos_uni_dic,
-                                  neg_uni_dic, pos_train, neg_train,i, j) == 1:
+                                  neg_uni_dic, pos_train, neg_train,i, j) == 0:
                         pos_count += 1
+
+            neg_count = 0
+            neg_total = 0
+            with open("./SentimentDataset/Train/neg_test.txt") as f:
+                for line in f:
+                    neg_total += 1
+                    if emotion(line, pos_bigram_count_dic, pos_w_first_count, neg_bigram_count_dic,
+                               neg_w_first_count, pos_uni_dic,
+                               neg_uni_dic, pos_train, neg_train, i, j) == 1:
+                        neg_count += 1
 
             print "*******"
             print i
             print j
-            print float(pos_count) / pos_total
-            if float(pos_count) / pos_total > maxProbility:
-                maxProbility = float(pos_count) / pos_total
+            print float(pos_count + neg_count) / (pos_total + neg_total)
+            if float(pos_count + neg_count) / (pos_total + neg_total) > maxProbility:
+                maxProbility = float(pos_count + neg_count) / (pos_total + neg_total)
                 maxLamada1 = i
                 maxLamada2 = j
             j += 0.01
