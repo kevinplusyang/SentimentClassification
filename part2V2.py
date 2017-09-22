@@ -203,6 +203,25 @@ def biGram_Possibility_Smooth(bigram_count_dic, w_first_count,  word_dic, combin
 
     return possibility
 
+def uniGram_Possibility_Smooth(Dic_Unk, sentence, lamada):
+    words = sentence.split()
+    possibility = 0
+
+    total_word_count = 0
+    word_kind = 0
+    for word in Dic_Unk:
+        word_kind += 1
+        total_word_count += Dic_Unk[word]
+
+
+
+    for word in words:
+        if word not in Dic_Unk:
+            word = "unk"
+        possibility += np.log(float(Dic_Unk[word] + lamada) / (total_word_count + lamada * word_kind) )
+
+    return possibility
+
 
 def sentence_Count(fileName):
     count = 0
@@ -213,83 +232,83 @@ def sentence_Count(fileName):
 
 
 
-# def main(fileName1, fileName2):
-#     pos_Dic_Unk, neg_Dic_Unk, combination_Dic_Unk = handleUnk(fileName1, fileName2)
-#     print pos_Dic_Unk
-#     print neg_Dic_Unk
-#     print combination_Dic_Unk
-#
-#     pos_bigram_count_dic, pos_w_first_count = biGram(fileName1, pos_Dic_Unk)
-#     neg_bigram_count_dic, neg_w_first_count = biGram(fileName2, neg_Dic_Unk)
-#
-#
-#
-#
-#     # pos_possibility = biGram_Possibility_Unsmooth(bigram_count_dic, w_first_count, neg_Dic_Unk, "Ming is beautiful too .")
-#
-#     pos_sentence_count = sentence_Count(fileName1)
-#     neg_sentence_count = sentence_Count(fileName2)
-#     print pos_sentence_count
-#     print neg_sentence_count
-#     pos_weight = np.log(float(pos_sentence_count) / (pos_sentence_count + neg_sentence_count))
-#     neg_weight = np.log(float(neg_sentence_count) / (pos_sentence_count + neg_sentence_count))
-#
-#
-#     lamada = 0.0001
-#     maxAcc = 0
-#     maxLamada = 0
-#
-#     while (lamada < 0.001) :
-#         pos_count = 0
-#         pos_total = 0
-#         with open('./SentimentDataset/Train/pos_test.txt') as f:
-#             for line in f:
-#                 pos_total += 1
-#                 pos_possibility = biGram_Possibility_Smooth(pos_bigram_count_dic, pos_w_first_count, pos_Dic_Unk,
-#                                                             combination_Dic_Unk, line, lamada)
-#                 neg_possibility = biGram_Possibility_Smooth(neg_bigram_count_dic, neg_w_first_count, neg_Dic_Unk,
-#                                                             combination_Dic_Unk, line, lamada)
-#                 pos = pos_possibility + pos_weight
-#                 neg = neg_possibility + neg_weight
-#                 if (pos > neg):
-#                     pos_count += 1
-#
-#         neg_count = 0
-#         neg_total = 0
-#
-#         with open('./SentimentDataset/Train/neg_test.txt') as f:
-#             for line in f:
-#                 neg_total += 1
-#                 pos_possibility = biGram_Possibility_Smooth(pos_bigram_count_dic, pos_w_first_count, pos_Dic_Unk,
-#                                                             combination_Dic_Unk, line, lamada)
-#                 neg_possibility = biGram_Possibility_Smooth(neg_bigram_count_dic, neg_w_first_count, neg_Dic_Unk,
-#                                                             combination_Dic_Unk, line, lamada)
-#                 pos = pos_possibility + pos_weight
-#                 neg = neg_possibility + neg_weight
-#                 if (neg > pos):
-#                     neg_count += 1
-#
-#         print "====================="
-#         print "Lamada"
-#         print lamada
-#         print "----Pos Accuracy----"
-#         print float(pos_count) / pos_total
-#
-#         print "----Neg Accuracy----"
-#         print float(neg_count) / neg_total
-#
-#         print "----Total Accuracy----"
-#         print float(pos_count + neg_count) / (pos_total + neg_total)
-#
-#         if float(pos_count + neg_count) / (pos_total + neg_total) > maxAcc:
-#             maxAcc = float(pos_count + neg_count) / (pos_total + neg_total)
-#             maxLamada = lamada
-#
-#         lamada += 0.0001
-#
-#
-#
-#     print maxLamada
+def findLamada(fileName1, fileName2):
+    pos_Dic_Unk, neg_Dic_Unk, combination_Dic_Unk = handleUnk(fileName1, fileName2)
+    print pos_Dic_Unk
+    print neg_Dic_Unk
+    print combination_Dic_Unk
+
+    pos_bigram_count_dic, pos_w_first_count = biGram(fileName1, pos_Dic_Unk)
+    neg_bigram_count_dic, neg_w_first_count = biGram(fileName2, neg_Dic_Unk)
+
+
+
+
+    # pos_possibility = biGram_Possibility_Unsmooth(bigram_count_dic, w_first_count, neg_Dic_Unk, "Ming is beautiful too .")
+
+    pos_sentence_count = sentence_Count(fileName1)
+    neg_sentence_count = sentence_Count(fileName2)
+    print pos_sentence_count
+    print neg_sentence_count
+    pos_weight = np.log(float(pos_sentence_count) / (pos_sentence_count + neg_sentence_count))
+    neg_weight = np.log(float(neg_sentence_count) / (pos_sentence_count + neg_sentence_count))
+
+
+    lamada = 0.01
+    maxAcc = 0
+    maxLamada = 0
+
+    while (lamada < 0.1) :
+        pos_count = 0
+        pos_total = 0
+        with open('./SentimentDataset/Train/pos_test.txt') as f:
+            for line in f:
+                pos_total += 1
+                pos_possibility = biGram_Possibility_Smooth(pos_bigram_count_dic, pos_w_first_count, pos_Dic_Unk,
+                                                            combination_Dic_Unk, line, lamada)
+                neg_possibility = biGram_Possibility_Smooth(neg_bigram_count_dic, neg_w_first_count, neg_Dic_Unk,
+                                                            combination_Dic_Unk, line, lamada)
+                pos = pos_possibility + pos_weight
+                neg = neg_possibility + neg_weight
+                if (pos > neg):
+                    pos_count += 1
+
+        neg_count = 0
+        neg_total = 0
+
+        with open('./SentimentDataset/Train/neg_test.txt') as f:
+            for line in f:
+                neg_total += 1
+                pos_possibility = biGram_Possibility_Smooth(pos_bigram_count_dic, pos_w_first_count, pos_Dic_Unk,
+                                                            combination_Dic_Unk, line, lamada)
+                neg_possibility = biGram_Possibility_Smooth(neg_bigram_count_dic, neg_w_first_count, neg_Dic_Unk,
+                                                            combination_Dic_Unk, line, lamada)
+                pos = pos_possibility + pos_weight
+                neg = neg_possibility + neg_weight
+                if (neg > pos):
+                    neg_count += 1
+
+        print "====================="
+        print "Lamada"
+        print lamada
+        print "----Pos Accuracy----"
+        print float(pos_count) / pos_total
+
+        print "----Neg Accuracy----"
+        print float(neg_count) / neg_total
+
+        print "----Total Accuracy----"
+        print float(pos_count + neg_count) / (pos_total + neg_total)
+
+        if float(pos_count + neg_count) / (pos_total + neg_total) > maxAcc:
+            maxAcc = float(pos_count + neg_count) / (pos_total + neg_total)
+            maxLamada = lamada
+
+        lamada += 0.01
+
+
+
+    print maxLamada
 
 
 def main(fileName1, fileName2):
@@ -314,7 +333,7 @@ def main(fileName1, fileName2):
     neg_weight = np.log(float(neg_sentence_count) / (pos_sentence_count + neg_sentence_count))
 
 
-    lamada = 0.0001
+    lamada = 0.009
     i= 1
     with open('./SentimentDataset/Test/test.txt') as f:
         for line in f:
@@ -333,10 +352,102 @@ def main(fileName1, fileName2):
                 print 1
 
 
+def perp(fileName1, fileName2, targetFile1, targetFile2):
+    pos_Dic_Unk, neg_Dic_Unk, combination_Dic_Unk = handleUnk(fileName1, fileName2)
+    pos_bigram_count_dic, pos_w_first_count = biGram(fileName1, pos_Dic_Unk)
+    neg_bigram_count_dic, neg_w_first_count = biGram(fileName2, neg_Dic_Unk)
 
 
+    pos_N = 0
+    with open('./SentimentDataset/Dev/pos.txt') as f:
+        for line in f:
+            words = line.split()
+            pos_N += len(words)
+    print pos_N
+
+    neg_N = 0
+    with open('./SentimentDataset/Dev/neg.txt') as f:
+        for line in f:
+            words = line.split()
+            neg_N += len(words)
+    print neg_N
+
+
+
+    pos_pos_bi_pp = 0
+    pos_neg_bi_pp = 0
+    lamada = 0.0009
+
+    with open('./SentimentDataset/Dev/pos.txt') as f:
+        for line in f:
+            pos_pos_bi_pp += biGram_Possibility_Smooth(pos_bigram_count_dic, pos_w_first_count, pos_Dic_Unk,
+                                                combination_Dic_Unk, line, lamada)
+            pos_neg_bi_pp += biGram_Possibility_Smooth(neg_bigram_count_dic, neg_w_first_count, neg_Dic_Unk,
+                                                combination_Dic_Unk, line, lamada)
+
+    print "------POS BI TXT PP---------"
+    pos_pos_bi_pp = pos_pos_bi_pp * -1 / pos_N
+    pos_neg_bi_pp = pos_neg_bi_pp * -1 / pos_N
+    print pos_pos_bi_pp
+    print pos_neg_bi_pp
+
+    neg_pos_bi_pp = 0
+    neg_neg_bi_pp = 0
+    lamada = 0.0009
+
+    with open('./SentimentDataset/Dev/neg.txt') as f:
+        for line in f:
+            neg_pos_bi_pp += biGram_Possibility_Smooth(pos_bigram_count_dic, pos_w_first_count, pos_Dic_Unk,
+                                                combination_Dic_Unk, line, lamada)
+            neg_neg_bi_pp += biGram_Possibility_Smooth(neg_bigram_count_dic, neg_w_first_count, neg_Dic_Unk,
+                                                combination_Dic_Unk, line, lamada)
+
+    print "------NEG BI TXT PP---------"
+    neg_pos_bi_pp = neg_pos_bi_pp * -1 / neg_N
+    neg_neg_bi_pp = neg_neg_bi_pp * -1 / neg_N
+    print neg_pos_bi_pp
+    print neg_neg_bi_pp
+
+
+    pos_pos_uni_pp = 0
+    pos_neg_uni_pp = 0
+    lamada = 0.0009
+
+    with open('./SentimentDataset/Dev/pos.txt') as f:
+        for line in f:
+            pos_pos_uni_pp += uniGram_Possibility_Smooth(pos_Dic_Unk, line, lamada)
+            pos_neg_uni_pp += uniGram_Possibility_Smooth(neg_Dic_Unk, line, lamada)
+
+    print "------POS UNI TXT PP---------"
+    pos_pos_uni_pp = pos_pos_uni_pp * -1 / pos_N
+    pos_neg_uni_pp = pos_neg_uni_pp * -1 / pos_N
+    print pos_pos_uni_pp
+    print pos_neg_uni_pp
+
+
+    neg_pos_uni_pp = 0
+    neg_neg_uni_pp = 0
+    lamada = 0.0009
+
+    with open('./SentimentDataset/Dev/neg.txt') as f:
+        for line in f:
+            neg_pos_uni_pp += uniGram_Possibility_Smooth(pos_Dic_Unk, line, lamada)
+            neg_neg_uni_pp += uniGram_Possibility_Smooth(neg_Dic_Unk, line, lamada)
+
+    print "------NEG UNI TXT PP---------"
+    neg_pos_uni_pp = neg_pos_uni_pp * -1 / neg_N
+    neg_neg_uni_pp = neg_neg_uni_pp * -1 / neg_N
+    print neg_pos_uni_pp
+    print neg_neg_uni_pp
+
+
+
+# This funciton will find and output the best Lamada value
+findLamada('./SentimentDataset/Train/pos_train.txt', './SentimentDataset/Train/neg_train.txt')
+
+# This function can output the result of recognition of each sentece in the test.txt. 0 represent positive
+# 1 represent negative
 main('./SentimentDataset/Train/pos.txt', './SentimentDataset/Train/neg.txt')
 
-
-
-
+#The function is used to calculate perplexity
+perp('./SentimentDataset/Train/pos.txt', './SentimentDataset/Train/neg.txt', './SentimentDataset/Dev/pos.txt', './SentimentDataset/Dev/neg.txt')
