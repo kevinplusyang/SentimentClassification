@@ -388,8 +388,8 @@ def perp(fileName1, fileName2, targetFile1, targetFile2):
     print "------POS BI TXT PP---------"
     pos_pos_bi_pp = pos_pos_bi_pp * -1 / pos_N
     pos_neg_bi_pp = pos_neg_bi_pp * -1 / pos_N
-    print pos_pos_bi_pp
-    print pos_neg_bi_pp
+    print np.exp(pos_pos_bi_pp)
+    print np.exp(pos_neg_bi_pp)
 
     neg_pos_bi_pp = 0
     neg_neg_bi_pp = 0
@@ -405,8 +405,8 @@ def perp(fileName1, fileName2, targetFile1, targetFile2):
     print "------NEG BI TXT PP---------"
     neg_pos_bi_pp = neg_pos_bi_pp * -1 / neg_N
     neg_neg_bi_pp = neg_neg_bi_pp * -1 / neg_N
-    print neg_pos_bi_pp
-    print neg_neg_bi_pp
+    print np.exp(neg_pos_bi_pp)
+    print np.exp(neg_neg_bi_pp)
 
 
     pos_pos_uni_pp = 0
@@ -421,8 +421,8 @@ def perp(fileName1, fileName2, targetFile1, targetFile2):
     print "------POS UNI TXT PP---------"
     pos_pos_uni_pp = pos_pos_uni_pp * -1 / pos_N
     pos_neg_uni_pp = pos_neg_uni_pp * -1 / pos_N
-    print pos_pos_uni_pp
-    print pos_neg_uni_pp
+    print np.exp(pos_pos_uni_pp)
+    print np.exp(pos_neg_uni_pp)
 
 
     neg_pos_uni_pp = 0
@@ -437,17 +437,17 @@ def perp(fileName1, fileName2, targetFile1, targetFile2):
     print "------NEG UNI TXT PP---------"
     neg_pos_uni_pp = neg_pos_uni_pp * -1 / neg_N
     neg_neg_uni_pp = neg_neg_uni_pp * -1 / neg_N
-    print neg_pos_uni_pp
-    print neg_neg_uni_pp
+    print np.exp(neg_pos_uni_pp)
+    print np.exp(neg_neg_uni_pp)
 
 
 
 # This funciton will find and output the best Lamada value
-findLamada('./SentimentDataset/Train/pos_train.txt', './SentimentDataset/Train/neg_train.txt')
+# findLamada('./SentimentDataset/Train/pos_train.txt', './SentimentDataset/Train/neg_train.txt')
 
 # This function can output the result of recognition of each sentece in the test.txt. 0 represent positive
 # 1 represent negative
-main('./SentimentDataset/Train/pos.txt', './SentimentDataset/Train/neg.txt')
+# main('./SentimentDataset/Train/pos.txt', './SentimentDataset/Train/neg.txt')
 
 #The function is used to calculate perplexity
 perp('./SentimentDataset/Train/pos.txt', './SentimentDataset/Train/neg.txt', './SentimentDataset/Dev/pos.txt', './SentimentDataset/Dev/neg.txt')
